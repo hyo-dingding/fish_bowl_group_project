@@ -63,9 +63,7 @@ def upload_file(request):
             instance = form.save()
             file_path = instance.file.path  # 저장된 파일의 경로를 가져옴
             
-            if file_path.endswith('.mp3'):
-                change_wav = process_mp3(file_path)
-            elif file_path.endswith('.wav'):
+            if file_path.endswith('.wav'):
                 change_wav = file_path
             stt_text = azure_stt_from_audio_file(change_wav)    #stt
             result = process_text(stt_text)  #llm에 넣기
