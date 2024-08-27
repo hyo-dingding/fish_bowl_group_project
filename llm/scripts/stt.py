@@ -35,6 +35,8 @@ import environ
 
 # load_dotenv()  # .env 파일에서 환경 변수 로드
 
+
+
 def azure_stt_from_audio_file(audio_file_path):
     speech_key = "fc46077d8bd240d9a1a0597020a2f8d4"
     service_region = "eastus" #  os.getenv("AZURE_SERVICE_REGION")
