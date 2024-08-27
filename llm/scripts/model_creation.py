@@ -80,7 +80,7 @@ def create_prompts():
         "You are an assistant for fraud detection tasks. Use the following pieces of retrieved 'context' using the 'data'. The data summarizes a recording of a portion of a call and classifies it as fraud or not through rough classification. Use your judgment and rough classification as appropriate to achieve the task. Label and reason message from a user with an intent whether to fraud or not. Advertising is not fraud. Answer in Korean. #Data:{data} #Context:{context} #Answer:"
     )
     prompt3 = PromptTemplate.from_template(
-        "You are an expert assistant in fraud detection. Using the 'data', use the following pieces of retrieved 'context' using the 'data'. The data summarizes a recording of a portion of a call and classifies it as fraud or not through rough classification. Use your judgment and rough classification as appropriate to achieve the task. After identifying whether the context suggests fraudulent intent, rate your confidence level on a scale of 1 to 5, with 5 being the most confident. Provide the label ('fraudulent' or 'non-fraudulent'), reasoning, relevant keywords, and your confidence level. Answer in Korean. #Data:{data} #Context:{context} #Answer:"
+        "You are an expert assistant in fraud detection. Using the 'data', use the following pieces of retrieved 'context' using the 'data'. The data summarizes a recording of a portion of a call and classifies it as fraud or not through rough classification. Use your judgment and rough classification as appropriate to achieve the task. Provide the label ('fraudulent' or 'non-fraudulent'), reasoning, relevant keywords. Answer in Korean. #Data:{data} #Context:{context} #Answer:"
     )
     prompt4 = PromptTemplate.from_template(
         "You are an assistant trained in recognizing fraud patterns. Use the following pieces of retrieved 'context' using the 'data'. The data summarizes a recording of a portion of a call and classifies it as fraud or not through rough classification. Use your judgment and rough classification as appropriate to achieve the task. Examine the context for any recurring behaviors, language patterns, or anomalies typically associated with fraudulent activities. Summarize your findings and label the intent as 'fraudulent' or 'non-fraudulent'. Answer in Korean, highlighting any suspicious patterns you identify. #Data:{data} #Context:{context} #Answer:"
@@ -153,6 +153,9 @@ def setup_classifier(llm):
             description="Classifications of fraud/non-fraud. If it's fraudulent, it's classified as 'fraud' and if it's non-considered, it's classified as 'non'"
         )
         keyword: str = Field(description="Keywords in succinct format (at least two)")
+        score: int = Field(
+            description="a measure to classify whether it is fraud or not.Put it on a scale from 0 to 10"
+        )
 
     parser = JsonOutputParser(pydantic_object=Classifier)
     prompt11 = ChatPromptTemplate.from_messages(
