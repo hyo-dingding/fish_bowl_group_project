@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>LLM 작업 결과</h1>
+    <h2>요약</h2>
+     <p>{{ result }}</p>
+    <p>{{ result.summary }}</p>
+
+    <h2>사기 탐지</h2>
+    <p>{{ result.detection }}</p>
+
+    <h2>화자 분리</h2>
+    <p>{{ result.speaker_labels }}</p>
+
+    <a href="{% url 'file_upload' %}">다시 업로드</a>
+{% endblock content %}

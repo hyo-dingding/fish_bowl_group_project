@@ -1,61 +1,69 @@
 <!DOCTYPE html>
 <html lang="ko">
+    {% include "head.html" %}
 
-{% include "head.html" %}
+    <body>
+        {% include "header.html" %}
 
-<body>
-    {% include "header.html" %}
+        <hr />
+        <div style="text-align: center; margin: 2rem 0">
+            {% block content %} {% endblock content %}
+        </div>
 
-    <hr>
+        <hr />
 
-    {% block content %}
+        {% include "footer.html" %}
+        <script>
+            let mediaRecorder;
+            let audioChunks = [];
 
-    {% endblock content %}
+            function startRecording() {
+                navigator.mediaDevices
+                    .getUserMedia({ audio: true })
+                    .then((stream) => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
 
-    <hr>
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
 
-    {% include "footer.html" %}
-     <script>
-        let mediaRecorder;
-        let audioChunks = [];
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, {
+                                type: "audio/wav",
+                            });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            document.getElementById("audioPlayback").src =
+                                audioUrl;
 
-        function startRecording() {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.start();
+                            // Reset for the next recording
+                            audioChunks = [];
+                        };
 
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
+                        document.getElementById(
+                            "startRecording"
+                        ).disabled = true;
+                        document.getElementById(
+                            "stopRecording"
+                        ).disabled = false;
+                    });
+            }
 
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        document.getElementById("audioPlayback").src = audioUrl;
+            function stopRecording() {
+                mediaRecorder.stop();
+                document.getElementById("startRecording").disabled = false;
+                document.getElementById("stopRecording").disabled = true;
+            }
 
-                        // Reset for the next recording
-                        audioChunks = [];
-                    };
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const files = document.getElementById("uploadFile").files;
+                    console.log(files); // 콘솔에 파일 목록 출력
 
-                    document.getElementById("startRecording").disabled = true;
-                    document.getElementById("stopRecording").disabled = false;
+                    // 실제 파일 업로드 처리 로직을 여기에 추가할 수 있습니다.
                 });
-        }
-
-        function stopRecording() {
-            mediaRecorder.stop();
-            document.getElementById("startRecording").disabled = false;
-            document.getElementById("stopRecording").disabled = true;
-        }
-
-        document.getElementById("uploadForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const files = document.getElementById("uploadFile").files;
-            console.log(files); // 콘솔에 파일 목록 출력
-
-            // 실제 파일 업로드 처리 로직을 여기에 추가할 수 있습니다.
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
