@@ -63,8 +63,14 @@ def upload_file(request):
             instance = form.save()
             file_path = instance.file.path  # 저장된 파일의 경로를 가져옴
             
-            # 파일 내용을 읽기
-            with open(file_path) as f:
+            if file_path.endswith('.mp3'):
+                change_wav = process_mp3(file_path)
+            elif file_path.endswith('.wav'):
+                change_wav = file_path
+            stt_text = azure_stt_from_audio_file(change_wav)    #stt
+            result = process_text(stt_text)  #llm에 넣기
+                
+            """with open(file_path) as f:
                 if file_path.endswith('.mp3'):
                     file_content = f.read()
                     change_wav = process_mp3(file_content)  # mp3 파일 처리
@@ -73,7 +79,7 @@ def upload_file(request):
                     change_wav = file_content   #wav파일은 그대로
                 stt_text = azure_stt_from_audio_file(change_wav)    #stt
                 result = process_text(stt_text)  #llm에 넣기
-            
+            """
             request.session['result'] = result  # 세션에 결과 저장
             return redirect('upload_success')  # 업로드 성공 페이지로 리다이렉트
     else:
