@@ -1,5 +1,4 @@
 # llm/views.py
-
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import upload_file_form
@@ -9,6 +8,7 @@ from .scripts.llm import process_text
 from asgiref.sync import async_to_sync
 import os
 from django.conf import settings
+import asyncio
 
 
 def handle_uploaded_file(f):
@@ -54,8 +54,11 @@ async def process_file(file_path):
 def check_processing_status(request):
     file_path = request.session.get("file_path", None)
     if file_path:
-        result = async_to_sync(process_file)(file_path)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(process_file(file_path))
         request.session["result"] = result
+        loop.close()
         return JsonResponse({"status": "done"})
     return JsonResponse({"status": "error"})
 

@@ -1,17 +1,33 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>LLM 작업 결과</h1>
-    <h2>요약</h2>
-     <p>{{ simplejson.dumps(simplejson.loads{output}, indent=4, sort_keys=True) }}</p>
-    <p>{{ result.summary }}</p>
-
-    <h2>사기 탐지</h2>
-    <p>{{ result.detection }}</p>
-
-    <h2>화자 분리</h2>
-    <p>{{ result.speaker_labels }}</p>
-
-    <a href="{% url 'file_upload' %}">다시 업로드</a>
-{% endblock content %}
-
+{% extends "base.html" %}    
+    
+{% block content %}    
+    <h1>LLM 작업 결과</h1>    
+      
+    <h2>요약</h2>    
+    <p>{{ result.summary }}</p>    
+    
+    <h2>결과</h2>    
+    <ul>  
+        {% for res in result.results %}  
+            <li>{{ res }}</li>  
+        {% endfor %}  
+    </ul>  
+    
+    <h2>컨센서스</h2>    
+    <p>{{ result.consen }}</p>    
+    
+    <h2>점수</h2>    
+    <ul>  
+        {% for score in result.scores %}  
+            <li>{{ score.score }}</li>  
+        {% endfor %}  
+    </ul>  
+    
+    <h2>최종 점수</h2>    
+    <p>{{ result.final }}</p>  
+    
+    <h2>평균 점수</h2>    
+    <p>{{ result.average_score }}</p>    
+    
+    <a href="{% url 'file_upload' %}">다시 업로드</a>    
+{% endblock content %}    
