@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyMuPDFLoader, DirectoryLoader
-from langchain.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import CSVLoader
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
@@ -76,6 +76,26 @@ def file_to_retriever(doc, text_splitter, embeddings):
 
 
 def create_prompts():
+    prompt = PromptTemplate(
+        input_variables=["data", "context", "category"],
+        template="""You are an assistant for 'data' summarization tasks.
+    The data is a record of a portion of a call.
+    summarize the data objectively,in literacy style, and in detail.
+    following pieces of retrieved context is example of similar context. 
+    judge the text using the context as reference. 
+    must list category as 'fraud' or 'non-fraud'. 
+    catch the keyword it to answer the data.
+    PLEASE, WRITE KEYWORDS AND CATEGORY
+    Answer in Korean.
+ 
+#Data:
+{data}
+#Context:
+{context}
+#category:
+{category}
+#Answer:""",
+    )
     prompt1 = PromptTemplate.from_template(
         "You are an assistant for fraud detection tasks. Use the following pieces of retrieved 'context' using the 'data'. The data summarizes a recording of a portion of a call and classifies it as fraud or not through rough classification. Use your judgment and rough classification as appropriate to achieve the task. Label and reason message from a user with an intent whether to fraud or not. Advertising is not fraud. Answer in Korean. #Data:{data} #Context:{context} #Answer:"
     )
@@ -97,7 +117,7 @@ def create_prompts():
     prompt8 = PromptTemplate.from_template(
         "You are an assistant for fraud detection tasks. The context given below is the fraud/non-fraud types you categorized before. Please organize and analyze the content given below and make a final conclusion. Label the intent as 'fraudulent' or 'non-fraudulent', and explain your reasoning along with relevant keywords. Answer in Korean. #Context:{context} #Answer:"
     )
-    return [prompt1, prompt3, prompt4, prompt5, prompt6, prompt7, prompt8]
+    return [prompt, prompt1, prompt3, prompt4, prompt5, prompt6, prompt7, prompt8]
 
 
 def create_chain(retriever, prompt, llm, retriever_type):
