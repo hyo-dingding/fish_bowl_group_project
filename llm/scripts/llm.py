@@ -28,14 +28,17 @@ def process_csv(file_content):
 async def execute_final_chain(dp, first_chain, chains, scorechain, final_chain):
     summary = await first_chain.ainvoke(dp)
     results = await asyncio.gather(*[chain.ainvoke(summary) for chain in chains])
-    score = await scorechain.abatch([{"data": i} for i in results])
+    scores = await scorechain.abatch([{"data": i} for i in results])
     consen = await final_chain.ainvoke(results)
     final = await scorechain.ainvoke({"data": consen})
+    score_values = [score["score"] for score in scores]
+    average_score = sum(score_values) / len(score_values) if score_values else 0
     df = (
         str(summary)
-        + str(["{}{}".format(b_, a_) for a_, b_ in zip(results, score)])
+        + str(["{}{}".format(b_, a_) for a_, b_ in zip(results, scores)])
         + str(final)
     )
+    df += f"\nAverage Score: {average_score}"
     return df
 
 
@@ -48,7 +51,7 @@ async def process_text(file_content):
     print("Processing text file", file_content)
     global first_chain, chains, scorechain, final_chain
     dfs = await run_model(file_content, first_chain, chains, scorechain, final_chain)
-    return str(dfs)
+    return dfs
 
 
 # 웹 서버 시작 시 모델 초기화

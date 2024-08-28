@@ -3,7 +3,7 @@
 {% block content %}
     <h1>LLM 작업 결과</h1>
     <h2>요약</h2>
-     <p>{{ result }}</p>
+     <p>{{ simplejson.dumps(simplejson.loads{output}, indent=4, sort_keys=True) }}</p>
     <p>{{ result.summary }}</p>
 
     <h2>사기 탐지</h2>
@@ -14,3 +14,4 @@
 
     <a href="{% url 'file_upload' %}">다시 업로드</a>
 {% endblock content %}
+
