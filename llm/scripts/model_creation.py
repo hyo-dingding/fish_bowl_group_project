@@ -201,7 +201,7 @@ def initialize_model():
     retriever_pdf = file_to_retriever(document_pdf, text_splitter, embeddings)
     prompts = create_prompts()
     first_chain = create_chain(retriever_csv, prompts[0], llm, "csv")
-    chains = [create_chain(retriever_pdf, prmt, llm, "pdf") for prmt in prompts[1:]]
+    chains = [create_chain(retriever_pdf, prmt, llm, "pdf") for prmt in prompts[1:-1]]
     scorechain = setup_classifier(llm)
     final_chain = (
         {"context": RunnablePassthrough()} | prompts[-1] | llm | StrOutputParser()
