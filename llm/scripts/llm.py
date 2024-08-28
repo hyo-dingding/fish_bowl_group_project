@@ -1,6 +1,7 @@
+# llm/scripts/llm.py
+
 import pandas as pd
 import asyncio
-
 from langchain.chains import LLMChain
 from llm.scripts.model_creation import initialize_model
 
@@ -43,14 +44,10 @@ async def run_model(dp, first_chain, chains, scorechain, final_chain):
 
 
 # 텍스트 파일 처리 함수
-def process_text(file_content):
+async def process_text(file_content):
     print("Processing text file", file_content)
-    # 전역 변수에서 초기화된 체인을 사용
     global first_chain, chains, scorechain, final_chain
-    dfs = asyncio.run(
-        run_model(file_content, first_chain, chains, scorechain, final_chain)
-    )
-    # 결과를 JSON 형태로 통합
+    dfs = await run_model(file_content, first_chain, chains, scorechain, final_chain)
     return str(dfs)
 
 
