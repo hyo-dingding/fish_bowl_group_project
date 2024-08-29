@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+    {% include "head.html" %}
+
+    <body>
+        {% include "header.html" %}
+
+        <hr />
+        <div style="text-align: center; margin: 2rem 0">
+            {% block content %} {% endblock content %}
+        </div>
+
+        <hr />
+
+        {% include "footer.html" %}
+        <script>
+            let mediaRecorder;
+            let audioChunks = [];
+
+            function startRecording() {
+                navigator.mediaDevices
+                    .getUserMedia({ audio: true })
+                    .then((stream) => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, {
+                                type: "audio/wav",
+                            });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            document.getElementById("audioPlayback").src =
+                                audioUrl;
+
+                            // Reset for the next recording
+                            audioChunks = [];
+                        };
+
+                        document.getElementById(
+                            "startRecording"
+                        ).disabled = true;
+                        document.getElementById(
+                            "stopRecording"
+                        ).disabled = false;
+                    });
+            }
+
+            function stopRecording() {
+                mediaRecorder.stop();
+                document.getElementById("startRecording").disabled = false;
+                document.getElementById("stopRecording").disabled = true;
+            }
+
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const files = document.getElementById("uploadFile").files;
+                    console.log(files); // 콘솔에 파일 목록 출력
+
+                    // 실제 파일 업로드 처리 로직을 여기에 추가할 수 있습니다.
+                });
+        </script>
+    </body>
+</html>
