@@ -218,14 +218,20 @@
             </div>  
             <div class="box">  
                 <div class="warning2">위험도 결과</div>  
-                <div id="resultBox" class="rectangle-351"></div>  
+                <div id="consenBox" class="content-box">  
+                    <div class="content-inner">{{ consen }}</div>  
+                </div>      
             </div>  
         </div>  
-        <div id="summaryBox" class="content-box">  
-            <div class="content-inner">{{ summary }}</div>  
-        </div>  
+ 
         <div class="toggle-title">  
             <div class="content-group">  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox0')">요약</button>  
+                    <div id="contentBox0" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ summary }}</div>  
+                    </div>  
+                </div>
                 <div>  
                     <button class="toggle-button" onclick="toggleContent('contentBox1')">기본요약분류</button>  
                     <div id="contentBox1" class="content-box" style="display:none;">  
@@ -264,9 +270,7 @@
                 </div>  
             </div>  
         </div>  
-        <div id="consenBox" class="content-box">  
-            <div class="content-inner">{{ consen }}</div>  
-        </div>  
+        
     </div>  
     <script>  
         function toggleContent(contentId) {  
@@ -306,6 +310,7 @@
   
         // Fetch the average score from the JSON and update the warning  
         const averageScore = {{ average_score }};  
+        console.log(averageScore); 
         updateWarning(averageScore);  
     </script>  
 </body>  
