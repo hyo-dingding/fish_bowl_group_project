@@ -12,14 +12,17 @@
       <img src="{% static 'icons/img_logo.png' %}" alt="" class="logo" />      
     </header>      
     
-    <section class="loading-container">      
-      <div class="bottom-sea"></div>      
-      <div class="fish-wrapper"> <img src="{% static 'icons/fish.gif' %}" alt="" class="fish" /></div>      
-              
-        <p>결과 분석중</p>      
-           
+    <section class="loading-container">
+     
+      <div class="bottom-sea"></div>
+      
+      <div class="fish-wrapper">
+       
+        <img src="{% static 'icons/fish.gif' %}" alt="" class="fish" />
+          <p class="loading-text">결과 분석중</p>
+       
+      </div>
     </section>      
-    
     <script>      
       function checkStatus() {      
         fetch("{% url 'check_processing_status' %}")      
@@ -36,6 +39,127 @@
       document.addEventListener("DOMContentLoaded", function() {      
         setTimeout(checkStatus, 1000); // 1초 후 상태 체크 시작      
       });      
-    </script>      
+    </script> 
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        min-width: 100vw;
+        min-height: 100vh;
+        width: 100%;
+        height: 100%;
+      }
+
+      .loading-container {
+        min-width: 375px;
+        height: 100%;
+      }
+
+      .logo {
+        position: absolute;
+        top: 53px;
+        left: 32px;
+      }
+
+      .bottom-sea {
+        background: url("/static/icons/img_sea.png");
+        background-repeat: repeat-x;
+        width: 100%;
+        height: 500px;
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        display: flex;
+        animation: bg-wave 50s linear infinite;
+        z-index: -1;
+      }
+
+      @keyframes bg-wave {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: 1000%;
+        }
+      }
+
+      .fish-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .fish-wrapper p {
+        position: absolute;
+        top: 10%;
+        left: 48%;
+        transform: translate(-50%, -50%) rotate(0deg);
+        font-weight: bold;
+        font-size: 60px;
+        /* color: #0D745F; */
+        padding: 8px 16px;
+        border-radius: 8px;
+      }
+
+      .loading-text {
+    position: absolute;
+    top: -20px; /* 텍스트를 더 위로 올립니다 */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem; /* 텍스트 크기를 더 크게 조정 */
+    font-weight: bold;
+    color: #f45c21; /* 텍스트 색상을 낚싯대와 구별되도록 변경 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* 텍스트에 그림자 추가 */
+}
+
+      .fish {
+        height: 600px;
+        /* background: url(-"./static/icons/fish.gif") no-repeat center center; */
+        background-size: cover;
+        position: relative;
+        animation: horizontal-shake 3s ease-in-out infinite;
+      }
+
+      @keyframes horizontal-shake {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-30px, 30px);
+        }
+        50% {
+          transform: translate(30px, -30px);
+        }
+        75% {
+          transform: translate(-15px, 15px);
+        }
+      }
+
+      @media all and (max-width: 1024px) {
+        .fish {
+          height: 40vh;
+        }
+
+        .bottom-sea {
+          height: 330px;
+          background-size: cover;
+          bottom: -30px;
+        }
+
+        .fish-wrapper {
+          align-items: flex-end;
+        }
+
+        .fish-wrapper img {
+          margin-bottom: 45%;
+        }
+      }
+    </style>     
   </body>      
 </html>  

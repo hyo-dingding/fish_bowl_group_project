@@ -52,7 +52,16 @@ html {
   align-items: center;  
   z-index: 10;  
 }  
-  
+.loading-text {
+  position: absolute;
+  top: -20px; /* 텍스트를 더 위로 올립니다 */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem; /* 텍스트 크기를 더 크게 조정 */
+  font-weight: bold;
+  color: #f45c21; /* 텍스트 색상을 낚싯대와 구별되도록 변경 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* 텍스트에 그림자 추가 */
+} 
 .fish-wrapper p {  
   position: absolute;  
   top: 40%;  
@@ -66,8 +75,7 @@ html {
 }  
   
 .fish {  
-  height: 600px;  
-  background: url("../icons/img_fish.png") no-repeat center center;  
+  height: 600px;    
   background-size: cover;  
   position: relative;  
   animation: horizontal-shake 3s ease-in-out infinite;  
