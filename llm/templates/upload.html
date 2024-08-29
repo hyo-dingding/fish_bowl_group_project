@@ -1,11 +1,105 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>파일 선택</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">업로드!!!!</button>
-    </form>
-{% endblock content %}
-
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Upload</title>  
+  {% load static %}  
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">  
+</head>  
+<body>  
+  <header>  
+    <img src="{% static 'icons/img_logo.png' %}" alt="" class="logo" />  
+  </header>  
+  <section class="file-upload-wrapper">  
+    <div class="content-wrapper">  
+      <p class="file-upload-text">  
+        보이스피싱 범죄자를 철저히 감지하고,<br />AI로 분석하여 어항 속에 가두는 유일한 방법  
+        <span>녹음 파일을 업로드 보이스피싱 여부를 확인하세요.</span>  
+      </p>  
+      <div class="voice-wrapper">  
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'file_upload' %}">  
+          {% csrf_token %}  
+          <article class="display-name-wrapper">  
+            <div>  
+              <div class="recording-wrapper">  
+                <button type="button" id="startRecording">  
+                  녹음 시작  
+                </button>  
+                <button type="button" id="stopRecording" disabled>  
+                  녹음 종료  
+                </button>  
+              </div>  
+              <div style="margin: 0 10px;">  
+                <audio id="audioPlayback" controls></audio>  
+              </div>  
+              <div class="file-upload" style="margin-left: 4rem;">  
+                <label for="fileInput" class="file-label">  
+                  <img src="{% static 'icons/upload.png' %}" alt="Audio Lines Icon">  
+                  <input type="file" id="fileInput" name="file">  
+                  <p id="file-name-display" class="file-name-display">  
+                    오디오 파일 업로드  
+                  </p>  
+                </label>  
+              </div>  
+            </div>  
+          </article>  
+          <div class="upload-wrapper">  
+            <button class="file-upload-voice" type="submit" id="uploadButton" disabled>업로드</button>  
+          </div>  
+        </form>  
+      </div>  
+    </div>  
+  </section>  
+  <script>  
+    document.addEventListener("DOMContentLoaded", function() {  
+      document.getElementById("fileInput").addEventListener("change", function () {  
+        const fileNameDisplay = document.getElementById("file-name-display");  
+        const fileName = this.files[0]?.name || "선택된 파일이 없습니다.";  
+        fileNameDisplay.textContent = `${fileName}`;  
+        document.getElementById("uploadButton").disabled = false;  
+      });  
+  
+      let mediaRecorder;  
+      let audioChunks = [];  
+  
+      window.startRecording = function() {  
+        navigator.mediaDevices  
+          .getUserMedia({ audio: true })  
+          .then((stream) => {  
+            mediaRecorder = new MediaRecorder(stream);  
+            mediaRecorder.start();  
+            mediaRecorder.ondataavailable = (event) => {  
+              audioChunks.push(event.data);  
+            };  
+            mediaRecorder.onstop = () => {  
+              const audioBlob = new Blob(audioChunks, {  
+                type: "audio/wav",  
+              });  
+              const audioUrl = URL.createObjectURL(audioBlob);  
+              document.getElementById("audioPlayback").src = audioUrl;  
+              audioChunks = [];  
+            };  
+            document.getElementById("startRecording").disabled = true;  
+            document.getElementById("stopRecording").disabled = false;  
+          })  
+          .catch((error) => {  
+            console.error("Error accessing microphone:", error);  
+            alert("마이크에 접근할 수 없습니다. 권한을 확인해주세요.");  
+          });  
+      };  
+  
+      window.stopRecording = function() {  
+        if (mediaRecorder) {  
+          mediaRecorder.stop();  
+          document.getElementById("startRecording").disabled = false;  
+          document.getElementById("stopRecording").disabled = true;  
+        }  
+      };  
+  
+      document.getElementById("startRecording").onclick = startRecording;  
+      document.getElementById("stopRecording").onclick = stopRecording;  
+    });  
+  </script>  
+</body>  
+</html>  

@@ -23,13 +23,13 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 업로드된 파일이 저장될 디렉토리 경로 설정
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # 업로드된 파일에 접근할 수 있는 URL 경로 설정
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
 
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -70,7 +70,7 @@ ROOT_URLCONF = "fish_bowl_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -131,10 +131,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "llm", "templates", "shared_static"),
 ]
 
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # 정적 파일 경로 설정
@@ -150,11 +151,10 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-
 # settings.py
 
 # 세션 엔진 설정 (디폴트는 DB 세션)
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # DB에 세션 저장
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # DB에 세션 저장
 # 또는 파일 기반 세션 사용
 # SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 
@@ -162,8 +162,10 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # DB에 세션 저장
 SESSION_COOKIE_AGE = 1209600  # 2주 (기본값)
 
 # 세션 쿠키 설정
-SESSION_COOKIE_NAME = 'sessionid'  # 쿠키의 이름 (기본값)
-SESSION_COOKIE_SECURE = False  # HTTPS를 통해서만 쿠키가 전송되도록 설정 (개발 중일 경우 False)
+SESSION_COOKIE_NAME = "sessionid"  # 쿠키의 이름 (기본값)
+SESSION_COOKIE_SECURE = (
+    False  # HTTPS를 통해서만 쿠키가 전송되도록 설정 (개발 중일 경우 False)
+)
 
 # 세션 쿠키가 클라이언트에 저장된 이후의 보안 설정
 SESSION_COOKIE_HTTPONLY = True  # 자바스크립트에서 세션 쿠키에 접근하지 못하도록 설정
@@ -172,7 +174,9 @@ SESSION_COOKIE_HTTPONLY = True  # 자바스크립트에서 세션 쿠키에 접�
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 브라우저가 닫히면 세션이 만료되지 않도록 설정
 
 # 세션의 만료일을 갱신할지 여부
-SESSION_SAVE_EVERY_REQUEST = False  # 세션이 변경되지 않더라도 매 요청마다 갱신되지 않도록 설정
+SESSION_SAVE_EVERY_REQUEST = (
+    False  # 세션이 변경되지 않더라도 매 요청마다 갱신되지 않도록 설정
+)
 
 # 세션 파일을 저장할 경로 (파일 기반 세션을 사용할 경우 필요)
 # SESSION_FILE_PATH = '/your/file/path/here'

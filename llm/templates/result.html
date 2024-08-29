@@ -1,33 +1,312 @@
-{% extends "base.html" %}    
-    
-{% block content %}    
-    <h1>LLM 작업 결과</h1>    
-      
-    <h2>요약</h2>    
-    <p>{{ result.summary }}</p>    
-    
-    <h2>결과</h2>    
-    <ul>  
-        {% for res in result.results %}  
-            <li>{{ res }}</li>  
-        {% endfor %}  
-    </ul>  
-    
-    <h2>컨센서스</h2>    
-    <p>{{ result.consen }}</p>    
-    
-    <h2>점수</h2>    
-    <ul>  
-        {% for score in result.scores %}  
-            <li>{{ score.score }}</li>  
-        {% endfor %}  
-    </ul>  
-    
-    <h2>최종 점수</h2>    
-    <p>{{ result.final }}</p>  
-    
-    <h2>평균 점수</h2>    
-    <p>{{ result.average_score }}</p>    
-    
-    <a href="{% url 'file_upload' %}">다시 업로드</a>    
-{% endblock content %}    
+<!DOCTYPE html>  
+<html lang="ko">  
+<head>  
+    {% load static %}  
+    <meta charset="UTF-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <link rel="stylesheet" href="./vars.css" />  
+    <link rel="stylesheet" href="./style_warning.css" />  
+    <style>  
+        a, button, input, select, h1, h2, h3, h4, h5, * {  
+            box-sizing: border-box;  
+            margin: 0;  
+            padding: 0;  
+            border: none;  
+            text-decoration: none;  
+            background: none;  
+            -webkit-font-smoothing: antialiased;  
+        }  
+        menu, ol, ul {  
+            list-style-type: none;  
+            margin: 0;  
+            padding: 0;  
+        }  
+        body {  
+            font-family: Arial, sans-serif;  
+            margin: 0;  
+            padding: 0;  
+            display: flex;  
+            justify-content: center;  
+            align-items: flex-start;  
+            min-height: 100vh;  
+            background-color: #ffffff;  
+        }  
+        .warning2 {  
+            color: #2d1005;  
+            text-align: center;  
+            font-family: "WorkSans-Bold", sans-serif;  
+            font-size: 3.75rem;  
+            font-weight: 700;  
+            margin-bottom: 1rem;  
+            margin-left: 5rem;  
+            margin-top: 2rem;  
+            text-align: left;  
+            margin-bottom: 1rem;  
+        }  
+        .box p {  
+            border-radius: 1.5rem;  
+            width: 80%;  
+            height: auto;  
+            padding-top: 1rem;  
+            box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);  
+        }  
+        .rectangle-351 {  
+            border-radius: 1.5rem;  
+            margin-left: 1rem;  
+            width: 100%;  
+            height: auto;  
+            margin-bottom: 1rem;  
+            padding: 1rem;  
+            box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);  
+            width: calc(100% - 2rem);  
+            min-height: 20rem;  
+        }  
+        .content-box {  
+            border-radius: 1.5rem;  
+            margin-left: 1rem;  
+            width: 100%;  
+            height: auto;  
+            margin-bottom: 4rem;  
+            padding: 1rem;  
+            box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);  
+            border-radius: 20px;  
+            margin-top: 1rem;  
+            min-height: 100px;  
+        }  
+        .content-box.active {  
+            display: block;  
+        }  
+        .warning {  
+            display: flex;  
+            align-items: center;  
+            margin-top: 10rem;  
+        }  
+        .warning9 {  
+            width: 30%;  
+            height: auto;  
+        }  
+        .warning8 {  
+            color: #FFD42A;  
+            font-family: "WorkSans-Bold", sans-serif;  
+            font-size: 6rem;  
+            font-weight: 700;  
+            margin-top: 1rem;  
+        }  
+        .left-warning {  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            border-radius: 1.5rem;  
+            margin-right: 5px;  
+            flex: 1;  
+        }  
+        .gauge-box {  
+            padding-left: 20px;  
+            flex: 1;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            padding-left: 20px;  
+        }  
+        .logo {  
+            position: absolute;  
+            top: 53px;  
+            left: 32px;  
+        }  
+        .toggle-title {  
+            padding-top: 1rem;  
+            justify-content: center;  
+            margin-right: 6%;  
+            margin-top: 2rem;  
+            align-items: flex-start;  
+            margin-bottom: 10rem;  
+        }  
+        .toggle-contents {  
+            width: 160px;  
+            height: 52px;  
+            border-radius: 20px;  
+            background: #f45c21;  
+            color: #fff;  
+            font-size: 1.25rem;  
+            font-weight: bold;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            cursor: pointer;  
+            margin-top: 2rem;  
+            margin-left: 3rem;  
+        }  
+        .toggle-button {  
+            width: 160px;  
+            height: 52px;  
+            border-radius: 20px;  
+            background: #f45c21;  
+            color: #fff;  
+            font-size: 1.25rem;  
+            font-weight: bold;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            cursor: pointer;  
+            margin-top: 2rem;  
+            margin-left: 3rem;  
+        }  
+        .toggle-button:hover {  
+            background-color: #d93b1e;  
+        }  
+        /* 반응형 스타일 */  
+        @media only screen and (max-width: 1024px) {  
+            .warning9 {  
+                width: 4rem;  
+            }  
+            .warning8 {  
+                font-size: 4rem;  
+            }  
+            .warning {  
+                padding: 5px;  
+            }  
+            .warning2 {  
+                font-size: 3rem;  
+            }  
+            .logo {  
+                width: 40%;  
+            }  
+        }  
+        @media only screen and (max-width: 768px) {  
+            .warning {  
+                padding: 5px;  
+            }  
+            .warning2 {  
+                font-size: 2.5rem;  
+            }  
+            .logo {  
+                width: 15%;  
+            }  
+            .warning9 {  
+                width: 20%;  
+            }  
+        }  
+        @media only screen and (max-width: 480px) {  
+            .warning {  
+                padding: 5px;  
+            }  
+            .warning2 {  
+                font-size: 2rem;  
+            }  
+            .logo {  
+                width: 20%;  
+            }  
+            .warning9 {  
+                width: 25%;  
+            }  
+        }  
+    </style>  
+    <title>Document</title>  
+</head>  
+<body>  
+    <div class="header">  
+        <div class="main-warning">  
+            <div class="warning">  
+                <div class="left-warning">  
+                    <img id="warningIcon" class="warning9" src="{% static 'icons/warning.png' %}" />  
+                    <div id="warningText" class="warning8">경계</div>  
+                </div>  
+                <div class="gauge-box">  
+                    <img id="gaugeIcon" class="warning5" src="{% static 'icons/warning_gauge.png' %}" />  
+                </div>  
+            </div>  
+            <div class="box">  
+                <div class="warning2">위험도 결과</div>  
+                <div id="resultBox" class="rectangle-351"></div>  
+            </div>  
+        </div>  
+        <div id="summaryBox" class="content-box">  
+            <div class="content-inner">{{ summary }}</div>  
+        </div>  
+        <div class="toggle-title">  
+            <div class="content-group">  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox1')">기본요약분류</button>  
+                    <div id="contentBox1" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.0 }}</div>  
+                    </div>  
+                </div>  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox2')">키워드감지</button>  
+                    <div id="contentBox2" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.1 }}</div>  
+                    </div>  
+                </div>  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox3')">패턴인식</button>  
+                    <div id="contentBox3" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.2 }}</div>  
+                    </div>  
+                </div>  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox4')">행동유도감지</button>  
+                    <div id="contentBox4" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.3 }}</div>  
+                    </div>  
+                </div>  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox5')">신뢰도평가</button>  
+                    <div id="contentBox5" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.4 }}</div>  
+                    </div>  
+                </div>  
+                <div>  
+                    <button class="toggle-button" onclick="toggleContent('contentBox6')">긴급성및압박감지</button>  
+                    <div id="contentBox6" class="content-box" style="display:none;">  
+                        <div class="content-inner">{{ results.5 }}</div>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+        <div id="consenBox" class="content-box">  
+            <div class="content-inner">{{ consen }}</div>  
+        </div>  
+    </div>  
+    <script>  
+        function toggleContent(contentId) {  
+            const contentBox = document.getElementById(contentId);  
+            if (contentBox.style.display === 'none') {  
+                contentBox.style.display = 'block';  
+            } else {  
+                contentBox.style.display = 'none';  
+            }  
+        }  
+  
+        function updateWarning(resultValue) {  
+            const warningIcon = document.getElementById('warningIcon');  
+            const gaugeIcon = document.getElementById('gaugeIcon');  
+            const warningText = document.getElementById('warningText');  
+  
+            if (resultValue < 2) {  
+                // 안전  
+                warningIcon.src = "{% static 'icons/safe.png' %}";   
+                gaugeIcon.src = "{% static 'icons/safe_gauge.png' %}";   
+                warningText.textContent = "안전";  
+                warningText.style.color = "#0D745F";   
+            } else if (resultValue < 5) {  
+                // 경계  
+                warningIcon.src = "{% static 'icons/warning.png' %}";   
+                gaugeIcon.src = "{% static 'icons/warning_gauge.png' %}";   
+                warningText.textContent = "경계";  
+                warningText.style.color = "#FFD42A";   
+            } else {  
+                // 사기  
+                warningIcon.src = "{% static 'icons/stop.png' %}";   
+                gaugeIcon.src = "{% static 'icons/stop_gauge.png' %}";   
+                warningText.textContent = "사기";  
+                warningText.style.color = "#FF1F06";   
+            }  
+        }  
+  
+        // Fetch the average score from the JSON and update the warning  
+        const averageScore = {{ average_score }};  
+        updateWarning(averageScore);  
+    </script>  
+</body>  
+</html>  

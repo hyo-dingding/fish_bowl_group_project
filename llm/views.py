@@ -1,4 +1,3 @@
-# llm/views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import upload_file_form
@@ -22,7 +21,7 @@ def handle_uploaded_file(f):
     return file_path
 
 
-def upload_file(request):
+def file_upload(request):
     if request.method == "POST":
         form = upload_file_form(request.POST, request.FILES)
         if form.is_valid():
@@ -38,9 +37,9 @@ def upload_file(request):
 def upload_success(request):
     file_path = request.session.get("file_path", None)
     if file_path:
-        return render(request, "upload_success.html", {"file_path": file_path})
+        return render(request, "loading.html", {"file_path": file_path})
     else:
-        return redirect("upload")
+        return redirect("file_upload")
 
 
 async def process_file(file_path):
@@ -52,7 +51,6 @@ async def process_file(file_path):
 
 
 def check_processing_status(request):
-
     file_path = request.session.get("file_path", None)
     if file_path:
         loop = asyncio.new_event_loop()
@@ -66,4 +64,18 @@ def check_processing_status(request):
 
 def result_page(request):
     result = request.session.get("result", {})
-    return render(request, "result.html", {"result": result})
+    summary = result.get("summary", "")
+    results = result.get("results", [])
+    consen = result.get("consen", "")
+    average_score = result.get("average_score", 0)
+
+    return render(
+        request,
+        "result.html",
+        {
+            "summary": summary,
+            "results": results,
+            "consen": consen,
+            "average_score": average_score,
+        },
+    )
