@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="./vars.css" />  
     <link rel="stylesheet" href="./style_warning.css" />  
     <style>  
+        .content-inner {  
+        margin-right: 2rem;
+        margin-left: 2rem;  
+            }
         a, button, input, select, h1, h2, h3, h4, h5, * {  
             box-sizing: border-box;  
             margin: 0;  
@@ -172,7 +176,9 @@
             .logo {  
                 width: 40%;  
             }  
-        }  
+        } 
+        
+
         @media only screen and (max-width: 768px) {  
             .warning {  
                 padding: 5px;  
@@ -206,6 +212,7 @@
 </head>  
 <body>  
     <div class="header">  
+        <img src="{% static 'icons/img_logo.png' %}" alt="" class="logo" />
         <div class="main-warning">  
             <div class="warning">  
                 <div class="left-warning">  
