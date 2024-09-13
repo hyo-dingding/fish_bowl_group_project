@@ -1,6 +1,6 @@
 <div align= "center">
     <div align="center">
-    <img src="./fish_bowl_project/llm/templates/shared_static/icons/img_logo.png" alt="Fish Bowl Logo" width="400">
+    <img src="./llm/templates/shared_static/icons/img_logo.png" alt="Fish Bowl Logo" width="400">
     </div>
 </div>
     <div style="text-align: left;"> 
@@ -15,24 +15,17 @@
 
 </li>
 <h2>시연 영상</h2>
-
 <ul>
-    <li>사기 데이터 시연 영상:</li>
-    <video width="600" controls>
-        <source src="./fish_bowl_project/llm/templates/shared_static/video/fraud.mp4" type="video/mp4">
-    </video>
-    <li>비사기 데이터 시연 영상:</li>
-    <video width="600" controls>
-        <source src="./fish_bowl_project/llm/templates/shared_static/video/non_fraud.mp4" type="video/mp4">
-    </video>
     <li> 시연영상: <a href="https://youtu.be/-ZyXkWokY8s" target="_blank">https://youtu.be/-ZyXkWokY8s</a></li>
+    <li>사기 데이터 시연 영상: <a href="https://youtu.be/rFufXf4fpF4" target="_blank">https://youtu.be/rFufXf4fpF4</a></li>
+    <li>비사기 데이터 시연 영상: <a href="https://youtu.be/cVFz0MUp3s0" target="_blank">https://youtu.be/cVFz0MUp3s0</a></li>
 </ul>
          
 
 
 <div style="text-align: left;">
  <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> Our Team </h2> <br> 
-<img src="./fish_bowl_project/llm/templates/shared_static/icons/team.png" alt="Fish Bowl Logo" width="600">
+<img src="./llm/templates/shared_static/icons/team.png" alt="Fish Bowl Logo" width="600">
 </div>
 </a>
     </div> 
@@ -58,11 +51,11 @@
 
 <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> Wireframe </h2> <br>
 
-<img src="./fish_bowl_project/llm/templates/shared_static/image/wireframe.png" alt="wireframe" width="500">
+<img src="./llm/templates/shared_static/image/wireframe.png" alt="wireframe" width="500">
 
 <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> Work-Flow </h2> <br>
 
-<img src="./fish_bowl_project/llm/templates/shared_static/image/work_flow.png" alt="work_flow" width="500">
+<img src="./llm/templates/shared_static/image/work_flow.png" alt="work_flow" width="500">
 
 <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 데이터 출처 </h2> <br>
  <ul>
@@ -72,8 +65,8 @@
 </ul>
 <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 시스템 아키텍처 </h2> <br>
 
-<img src="./fish_bowl_project/llm/templates/shared_static/image/architecture.png" alt="work_flow" width="500">
-<img src="./fish_bowl_project/llm/templates/shared_static/image/conditional.png" alt="work_flow" width="500">
+<img src="./llm/templates/shared_static/image/architecture.png" alt="work_flow" width="500">
+<img src="./llm/templates/shared_static/image/conditional.png" alt="work_flow" width="500">
 
 
 1. **파일 업로드**
